@@ -1,0 +1,13 @@
+/*	
+ * jQuery mmenu keyboardNavigation add-on
+ * mmenu.frebsite.nl
+ *
+ * Copyright (c) Fred Heusschen
+ */
+.mm-menu_keyboardfocus a:focus {
+  outline: none;
+}
+
+.mm-menu_keyboardfocus a:focus {
+  background: rgba(255, 255, 255, 0.4);
+}/*# sourceMappingURL=jquery.mmenu.keyboardnavigation.css.map */

@@ -1,0 +1,43 @@
+/*	
+ * jQuery mmenu dividers add-on
+ * mmenu.frebsite.nl
+ *
+ * Copyright (c) Fred Heusschen
+ */
+.mm-listitem_divider {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.mm-menu_dividers-light .mm-listitem_divider {
+  background: inherit;
+  font-size: inherit;
+  color: rgba(0, 0, 0, 0.3);
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+.mm-border-none .mm-listitem_divider {
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+
+.mm-listview_fixeddivider {
+  background: inherit;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  transform: translate(0, 0);
+  transform: translate3d(0, 0, 0);
+}
+.mm-listview_fixeddivider:after {
+  content: none !important;
+  display: none !important;
+}
+
+.mm-panel_dividers .mm-listview_fixeddivider {
+  display: block;
+}/*# sourceMappingURL=jquery.mmenu.dividers.css.map */

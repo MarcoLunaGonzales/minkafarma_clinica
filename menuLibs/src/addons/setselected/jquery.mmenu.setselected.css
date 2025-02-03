@@ -1,0 +1,32 @@
+/*	
+ * jQuery mmenu setSelected add-on
+ * mmenu.frebsite.nl
+ *
+ * Copyright (c) Fred Heusschen
+ */
+.mm-menu_selected-hover .mm-listitem > a:not(.mm-btn_fullwidth),
+.mm-menu_selected-hover .mm-listitem > a.mm-btn_fullwidth + span,
+.mm-menu_selected-hover .mm-listitem > a.mm-btn_fullwidth + a,
+.mm-menu_selected-parent .mm-listitem > a:not(.mm-btn_fullwidth),
+.mm-menu_selected-parent .mm-listitem > a.mm-btn_fullwidth + span,
+.mm-menu_selected-parent .mm-listitem > a.mm-btn_fullwidth + a {
+  transition: background 0.4s ease;
+}
+
+.mm-menu_selected-hover .mm-listview:hover > .mm-listitem_selected > a,
+.mm-menu_selected-hover .mm-listview:hover > .mm-listitem_selected > span {
+  background: none;
+}
+.mm-menu_selected-hover .mm-listitem > a:not(.mm-btn_fullwidth):hover,
+.mm-menu_selected-hover .mm-listitem > a.mm-btn_fullwidth:hover + span {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.mm-menu_selected-parent .mm-panel_opened-parent .mm-listitem:not(.mm-listitem_selected-parent) > a,
+.mm-menu_selected-parent .mm-panel_opened-parent .mm-listitem:not(.mm-listitem_selected-parent) > span {
+  background: none;
+}
+.mm-menu_selected-parent .mm-listitem_selected-parent > a.mm-btn_next:not(.mm-btn_fullwidth),
+.mm-menu_selected-parent .mm-listitem_selected-parent > a.mm-btn_fullwidth + span {
+  background: rgba(255, 255, 255, 0.4);
+}/*# sourceMappingURL=jquery.mmenu.setselected.css.map */

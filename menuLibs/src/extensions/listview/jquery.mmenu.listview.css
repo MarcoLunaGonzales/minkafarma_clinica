@@ -1,0 +1,75 @@
+/*
+ * jQuery mmenu listview extension
+ * mmenu.frebsite.nl
+ *
+ * Copyright (c) Fred Heusschen
+ */
+.mm-menu_listview-30 .mm-listitem > a:not(.mm-btn_next),
+.mm-menu_listview-30 .mm-listitem > span {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.mm-menu_listview-30 .mm-listitem_vertical > .mm-btn_next {
+  height: 30;
+}
+
+.mm-menu_listview-50 .mm-listitem > a:not(.mm-btn_next),
+.mm-menu_listview-50 .mm-listitem > span {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.mm-menu_listview-50 .mm-listitem_vertical > .mm-btn_next {
+  height: 50;
+}
+
+.mm-menu_listview-60 .mm-listitem > a:not(.mm-btn_next),
+.mm-menu_listview-60 .mm-listitem > span {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.mm-menu_listview-60 .mm-listitem_vertical > .mm-btn_next {
+  height: 60;
+}
+
+.mm-menu_listview-justify .mm-panels > .mm-panel:before, .mm-menu_listview-justify .mm-panels > .mm-panel:after,
+.mm-panels > .mm-panel_listview-justify:before,
+.mm-panels > .mm-panel_listview-justify:after {
+  content: none;
+  display: none;
+}
+.mm-menu_listview-justify .mm-panels > .mm-panel .mm-listview,
+.mm-panels > .mm-panel_listview-justify .mm-listview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.mm-menu_listview-justify .mm-panels > .mm-panel .mm-listitem,
+.mm-panels > .mm-panel_listview-justify .mm-listitem {
+  flex: 1 0 auto;
+  min-height: 40px; /* for Safari :( */
+}
+.mm-menu_listview-justify .mm-panels > .mm-panel .mm-listitem:not(.mm-listitem_divider),
+.mm-panels > .mm-panel_listview-justify .mm-listitem:not(.mm-listitem_divider) {
+  display: flex;
+  flex-direction: column;
+}
+.mm-menu_listview-justify .mm-panels > .mm-panel .mm-listitem > a:not(.mm-btn_next),
+.mm-menu_listview-justify .mm-panels > .mm-panel .mm-listitem > span,
+.mm-panels > .mm-panel_listview-justify .mm-listitem > a:not(.mm-btn_next),
+.mm-panels > .mm-panel_listview-justify .mm-listitem > span {
+  box-sizing: border-box;
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.mm-listview_inset {
+  list-style: inside disc;
+  padding: 0 10px 15px 40px;
+  margin: 0;
+}
+.mm-listview_inset > li {
+  padding: 5px 0;
+}/*# sourceMappingURL=jquery.mmenu.listview.css.map */

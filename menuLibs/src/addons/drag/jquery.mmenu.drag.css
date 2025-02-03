@@ -1,0 +1,10 @@
+/*	
+ * jQuery mmenu drag add-on
+ * mmenu.frebsite.nl
+ *
+ * Copyright (c) Fred Heusschen
+ */
+.mm-wrapper_opened.mm-dragging .mm-menu,
+.mm-wrapper_opened.mm-dragging .mm-slideout {
+  transition-duration: 0s;
+}/*# sourceMappingURL=jquery.mmenu.drag.css.map */
