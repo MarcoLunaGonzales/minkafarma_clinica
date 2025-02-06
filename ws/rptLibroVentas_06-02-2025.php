@@ -29,8 +29,7 @@ if ($tipo > 0) {
 $sql = "SELECT s.nro_correlativo, s.fecha AS fecha, s.monto_final, s.razon_social, s.nit, s.siat_cuf AS nro_autorizacion, s.salida_anulada, '0' AS cod_control, 
 	(SELECT c.descripcion FROM ciudades c, almacenes a WHERE a.cod_ciudad=c.cod_ciudad AND a.cod_almacen=s.cod_almacen) AS nombre_ciudad, s.cod_tipo_doc, s.siat_complemento 
 	FROM salida_almacenes s 
-	WHERE YEAR(s.fecha)='$codAnio' AND MONTH(s.fecha)='$codMes' 
-    AND s.cod_tiposalida = 1001 ";
+	WHERE YEAR(s.fecha)='$codAnio' AND MONTH(s.fecha)='$codMes' ";
 
 if(!empty($rpt_territorio)){
     $sql .= " AND s.cod_almacen IN (SELECT a.cod_almacen FROM almacenes a WHERE a.cod_ciudad IN ($rpt_territorio)) ";
