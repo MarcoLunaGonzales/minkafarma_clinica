@@ -77,7 +77,7 @@ while ($fila = mysqli_fetch_assoc($resp)) {
 }
 
 $response = [
-    'fechaInicio' 		=> $sql,
+    'fechaInicio'       => $fechaInicio,
     'fechaFin' 	    	=> $fechaFin,
     'nombreRazonSocial' => $nombreTxt,
     'nit' 				=> $nitTxt,
