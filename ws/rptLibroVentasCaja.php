@@ -6,8 +6,11 @@ require('../function_formatofecha.php');
 require('../conexionmysqli.inc');
 require('../funcion_nombres.php');
 
-$fechaInicio = isset($_GET['fechaInicio']) ? date('Y-m-d H:i:s', strtotime(str_replace('T', ' ', $_GET['fechaInicio']))) : date('Y-m-01 00:00:00');
-$fechaFin    = isset($_GET['fechaFin']) ? date('Y-m-d H:i:s', strtotime(str_replace('T', ' ', $_GET['fechaFin']))) : date('Y-m-t 23:59:59');
+// $fechaInicio = isset($_GET['fechaInicio']) ? date('Y-m-d H:i:s', strtotime(str_replace('T', ' ', $_GET['fechaInicio']))) : date('Y-m-01 00:00:00');
+// $fechaFin    = isset($_GET['fechaFin']) ? date('Y-m-d H:i:s', strtotime(str_replace('T', ' ', $_GET['fechaFin']))) : date('Y-m-t 23:59:59');
+
+$fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio']: date('Y-m-01 00:00:00');
+$fechaFin    = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : date('Y-m-t 23:59:59');
 
 $rpt_territorio = $_GET['codTipoTerritorio'] ?? '';
 $tipoPago 		= $_GET['tipoPago'] ?? '';
