@@ -53,7 +53,6 @@ $sql = "SELECT
         WHERE f.cod_personal = '$cod_personal'
         AND CONCAT(s.fecha, ' ', s.hora_salida) BETWEEN '$fechaInicio' AND '$fechaFin'  
         AND s.cod_tiposalida = 1001 
-        AND s.estado_salida = 1
         AND s.salida_anulada = 0 ";
 
 if(!empty($tipoPago)){
