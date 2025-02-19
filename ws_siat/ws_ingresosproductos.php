@@ -72,10 +72,10 @@ if (!empty($contabilizado)) {
 }
 
 if (!empty($gestion)) {
-    $queryMaestro .= " AND YEAR(i.fecha) = '$gestion'";
+    $queryMaestro .= " AND YEAR(i.fecha_factura_proveedor) = '$gestion'";
 }
 if (!empty($mes)) {
-    $queryMaestro .= " AND MONTH(i.fecha) = '$mes'";
+    $queryMaestro .= " AND MONTH(i.fecha_factura_proveedor) = '$mes'";
 }
 
 // Agregar filtro de monto si ambos parámetros están definidos y válidos
