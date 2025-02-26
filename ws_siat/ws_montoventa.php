@@ -6,22 +6,22 @@ require_once "../conexionmysqlipdf.inc";
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    $datos = json_decode(file_get_contents("php://input"), true); 
-    //$accion = NULL;
+    // $datos = json_decode(file_get_contents("php://input"), true); 
     
-    $mes=$_GET['mes'];
-    var_dump($datos);
-    echo "MES: ".$mes;
-    echo "accion: ".$datos['accion']." identificador: ".$datos['sIdentificador']." key: ".$datos['sKey'];
+    $mes            = $_GET['mes'] ?? "";
+    $anio           = $_GET['anio'] ?? null;
+    $accion         = $_GET['accion'] ?? null;
+    $sKey           = $_GET['sKey'] ?? null;
+    $sIdentificador = $_GET['sIdentificador'] ?? null;
     
-    if (isset($datos['accion']) && isset($datos['sIdentificador']) && isset($datos['sKey'])) {
+    if (!empty($accion) && !empty($sIdentificador) && !empty($sKey)) {
         if (
-            $datos['sIdentificador'] == "farma_online" &&
-            $datos['sKey'] == "123456"
+            $sIdentificador == "farma_online" &&
+            $sKey == "123456"
         ) {
-            $accion = $datos['accion']; // recibimos la accion
-            $mesServicio = $datos['mes'];
-            $anioServicio = $datos['anio'];
+            $accion = $accion; // recibimos la accion
+            $mesServicio = $mes;
+            $anioServicio = $anio;
             $sucursalServicio = "1";
 
             $montoVenta = 0;
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 "mensaje" => "Credenciales Incorrectas"
             );
         }
-        
+        ob_clean();
         header('Content-type: application/json');
         echo json_encode($resultado);
     } else {
@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             "mensaje" => "El acceso al WS es incorrecto"
         );
         
+        ob_clean();
         header('Content-type: application/json');
         echo json_encode($resp);
     }
