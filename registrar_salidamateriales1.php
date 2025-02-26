@@ -656,7 +656,7 @@ else
 						i.ingreso_anulado=0 and i.cod_tipoingreso in (999,1000) and id.cod_material=cd.cod_material order by i.cod_ingreso_almacen desc limit 1)) as nombre_material, m.cantidad_presentacion, cd.cantidad_unitaria, cd.monto_unitario, cd.precio_unitario, cd.descuento_unitario
 				FROM cotizaciones_detalle cd
 				LEFT JOIN material_apoyo m ON m.codigo_material = cd.cod_material
-				WHERE cd.cod_salida_almacen = '$cod_cotizacion'";
+				WHERE cd.cod_salida_almacen = '$cod_cotizacion'  order by cd.orden_detalle";
 		$resp2=mysqli_query($enlaceCon,$sql2);
 		while($rawCotizacion = mysqli_fetch_array($resp2)){
 			$nro_materialActivo++;

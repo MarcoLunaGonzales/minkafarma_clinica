@@ -302,6 +302,13 @@ if($sql_inserta==1){
 		$respInsertFactura=mysqli_query($enlaceCon,$sqlInsertFactura);	
 	}
 
+	/*SI VIENEN DE UNA COTIZACION LO ACTUALIZAMOS*/
+	if($codCotizacion>0){
+		$sqlUpdCotizacion="update cotizaciones set estado_salida=2 where cod_salida_almacenes='$codCotizacion'";
+		$respUpdCotizacion=mysqli_query($enlaceCon, $sqlUpdCotizacion);
+		//echo $sqlUpdCotizacion;
+	}
+
 	$estado_receta=0;
 	$montoTotalVentaDetalle=0;
 	for($i=1;$i<=$cantidad_material;$i++)
@@ -358,16 +365,8 @@ if($sql_inserta==1){
 					// echo $sqlUpdMonto;
 		$respUpdMonto=mysqli_query($enlaceCon,$sqlUpdMonto);
 	}
-
+	
 	if($tipoSalida==1001){
-		
-		/*SI VIENEN DE UNA COTIZACION LO ACTUALIZAMOS*/
-		if($codCotizacion>0){
-			$sqlUpdCotizacion="update cotizaciones set estado_salida=2 where cod_salida_almacenes='$codCotizacion'";
-			$respUpdCotizacion=mysqli_query($enlaceCon, $sqlUpdCotizacion);
-			//echo $sqlUpdCotizacion;
-		}
-
 		//servicios siat
 		if($tipoDoc==1){		
 			$sqlRecep="select siat_codigoRecepcion from salida_almacenes where cod_salida_almacenes='$codigo'";
@@ -642,7 +641,7 @@ if($sql_inserta==1){
 		echo "<script type='text/javascript' language='javascript'>
 			location.href='navegador_salidamateriales.php';
 		</script>";
-	}	
+	}
 }else{
 		echo "<script type='text/javascript' language='javascript'>
 			alert('Ocurrio un error en la transaccion. Contacte con el administrador del sistema.');

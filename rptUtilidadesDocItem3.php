@@ -21,7 +21,7 @@ $fecha_reporte=date("d/m/Y");
 $nombre_territorio=nombreTerritorio($enlaceCon, $rpt_territorio);
 
 
-echo "<h1>Reporte Costo de Ventas x Documento y Producto 2</h1>
+echo "<h1>Reporte Costo de Salidas x Documento y Producto </h1>
 	<h2>Territorio: $nombre_territorio <br> De: $fecha_ini A: $fecha_fin
 	<br>Fecha Reporte: $fecha_reporte
 	</h2>";
@@ -34,7 +34,7 @@ m.`codigo_material`, m.`descripcion_material`,
 	from `salida_almacenes` s, `salida_detalle_almacenes` sd, `material_apoyo` m 
 	where s.`cod_salida_almacenes`=sd.`cod_salida_almacen` and s.`fecha` BETWEEN '$fecha_iniconsulta' and '$fecha_finconsulta'
 	and s.`salida_anulada`=0 and sd.`cod_material`=m.`codigo_material` and 
-	s.`cod_almacen` in (select a.`cod_almacen` from `almacenes` a where a.`cod_ciudad`='$rpt_territorio') and s.cod_tiposalida=1001
+	s.`cod_almacen` in (select a.`cod_almacen` from `almacenes` a where a.`cod_ciudad`='$rpt_territorio') and s.cod_tiposalida<>1001
 	group by s.fecha, s.nro_correlativo, m.codigo_material, m.descripcion_material
 	order by 1,3,13";
 
@@ -47,17 +47,12 @@ echo "<center><table class='textomediano'>
 <tr>
 <th>Fecha</th>
 <th>Nro</th>
-<th>Vendedor</th>
 <th>Codigo</th>
-<th>Material</th>
+<th>Producto</th>
 <th>Glosa</th>
 <th>Cantidad</th>
 <th>Costo[u]_87%</th>
-<th>Precio[u]</th>
 <th>CostoTotal</th>
-<th>VentaTotal_87%</th>
-<th>Descuento</th>
-<th>Utilidad[Bs]</th>
 </tr>
 </thead>
 ";
@@ -121,17 +116,12 @@ while($datos=mysqli_fetch_array($resp)){
 	echo "<tr class='$txtFondo'>
 	<td>$fecha</td>
 	<td>$nroNota</td>
-	<td>$nombreVendedor</td>
 	<td>$codItem</td>
 	<td>$nombreItem</td>
 	<td>$observacionesNota</td>
 	<td>$cantidadFormat</td>
 	<td>$costoUnitarioF</td>	
-	<td>$precioUnitarioF</td>
 	<td>$montoCostoFormat</td>
-	<td>$montoPtr</td>
-	<td>$descuentoAdiProductoF</td>
-	<td>$utilidadFormat</td>
 	</tr>";
 }
 $totalPtr=number_format($totalVenta,2,".",",");
@@ -144,14 +134,9 @@ echo "<tr>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>	
 	<td>&nbsp;</td>	
 	<th>Total:</td>
 	<th>$totalCostoFormat</th>
-	<th>$totalPtr</th>
-	<td>&nbsp;</td>
-	<th>$totalUtilidadFormat</th>
 <tr>";
 echo "</tbody>";
 echo "</table>";

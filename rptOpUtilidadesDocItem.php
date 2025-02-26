@@ -7,6 +7,10 @@
 		f.action='rptUtilidadesDocItem2.php';
 		f.submit();
 	}
+	function enviar_reporte3(f){
+		f.action='rptUtilidadesDocItem3.php';
+		f.submit();
+	}
 </script>
 <?php
 require("conexionmysqli2.inc");
@@ -44,8 +48,9 @@ echo"<form method='post' action='rptUtilidadesDocItem.php' target='_blank'>";
 	
 	echo"\n </table><br>";
 	require('home_almacen.php');
-	echo "<center><input type='button' onclick='enviar_reporte1(this.form)' name='reporte' value='Ver Reporte' class='boton'>
-		<input type='button' onclick='enviar_reporte2(this.form)' name='reporte2' value='Ver Reporte 2' class='boton2'>
+	echo "<center><input type='button' onclick='enviar_reporte1(this.form)' name='reporte' value='Costo Ventas' class='boton'>
+		<input type='button' onclick='enviar_reporte2(this.form)' name='reporte2' value='Costo Ventas 2' class='boton2'>
+		<input type='button' onclick='enviar_reporte3(this.form)' name='reporte2' value='Costo Salidas' class='boton-azul'>
 	</center><br>";
 	echo"</form>";
 	echo "</div>";

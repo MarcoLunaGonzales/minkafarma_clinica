@@ -2,18 +2,22 @@
 
 require_once "../conexionmysqlipdf.inc";
 
-echo "HOLA";
+//echo "HOLA";
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     $datos = json_decode(file_get_contents("php://input"), true); 
-    $accion = NULL;
+    //$accion = NULL;
+    
+    $mes=$_GET['mes'];
+    var_dump($datos);
+    echo "MES: ".$mes;
+    echo "accion: ".$datos['accion']." identificador: ".$datos['sIdentificador']." key: ".$datos['sKey'];
     
     if (isset($datos['accion']) && isset($datos['sIdentificador']) && isset($datos['sKey'])) {
         if (
             $datos['sIdentificador'] == "farma_online" &&
-            $datos['sKey'] == "RmFyYl9pdF8wczIwMjI="
+            $datos['sKey'] == "123456"
         ) {
             $accion = $datos['accion']; // recibimos la accion
             $mesServicio = $datos['mes'];
@@ -22,16 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $montoVenta = 0;
             if ($anioServicio > 0 && $mesServicio > 0) {
-                // $sql="select sum(s.monto_final) as monto
-                //     from `salida_almacenes` s where s.`cod_tiposalida`=1001 and s.salida_anulada=0 and
-                //     s.`cod_almacen` in (select a.`cod_almacen` from `almacenes` a where a.`cod_ciudad` in ($sucursalServicio))
-                //                     and YEAR(s.fecha)='$anioServicio' and MONTH(s.fecha)='$mesServicio' ";  
-                // $resp=mysqli_query($enlaceCon,$sql);
-                // $monto=0;             
-                // while($detalle=mysqli_fetch_array($resp)){    
-                //     $monto+=$detalle[0];         
-                // }  
-                $montoVenta=1000;
+                $sql="select sum(s.monto_final) as monto
+                    from `salida_almacenes` s where s.`cod_tiposalida`=1001 and s.salida_anulada=0 and
+                    s.`cod_almacen` = '1001' and YEAR(s.fecha)='$anioServicio' and MONTH(s.fecha)='$mesServicio' ";  
+
+                //echo $sql;
+                
+                $resp=mysqli_query($enlaceCon,$sql);
+                while($detalle=mysqli_fetch_array($resp)){    
+                    $montoVenta+=$detalle[0];         
+                }  
             }
 
             $resultado = array(
