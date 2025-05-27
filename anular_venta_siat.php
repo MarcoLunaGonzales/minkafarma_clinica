@@ -2,11 +2,11 @@
 require("conexionmysqli.inc");
 require("estilos_almacenes.inc");
 require("siat_folder/funciones_siat.php");
+require("funciones.php");
 
 require("enviar_correo/php/send-email_anulacion.php");
 
 $global_almacen=$_COOKIE["global_almacen"];
-
 
 $enviar_correo=$_GET["enviar_correo"];
 $correo_destino=$_GET["correo_destino"];
@@ -44,7 +44,29 @@ while($dat_verif=mysqli_fetch_array($resp_verif)){
 	$proveedor=$dat_verif['cliente'];
 	$idproveedor=$dat_verif['cod_cliente'];
 	// $correo_destino=obtenerCorreosListaCliente($idproveedor);
-}		
+}
+/******************************************
+ * ANULA COMPROBANTE EN SISTEMA FINANCIERO
+ ******************************************/
+$url_financiero = obtenerValorConfiguracion($enlaceCon, '-5');
+$json_url = $url_financiero . '/comprobantes/backend_anular_comprobante_farmacia.php';
+$postFields = [
+    'codigo' => $codigo_registro
+];
+$ch = curl_init($json_url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postFields));
+$response = curl_exec($ch);
+curl_close($ch);
+$responseData = json_decode($response, true);
+// if ($responseData && $responseData['status'] === true) {
+//     echo "✅ " . $responseData['message'];
+// } else {
+//     echo "❌ Error: " . ($responseData['message'] ?? 'No se pudo procesar la solicitud');
+// }
+/******************************************/
+// exit;
 // $anulado==0;
 if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 	if($cufd<>"0" and $cuis<>"0"){
