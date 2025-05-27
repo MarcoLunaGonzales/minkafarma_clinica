@@ -218,10 +218,10 @@ $consulta = "
 $resp = mysqli_query($enlaceCon,$consulta);
 echo "<h1>Ingreso de Materiales</h1>";
 
-echo "<table border='1' cellspacing='0' class='textomini'><tr><th>Leyenda:</th><th>Ingresos Anulados</th><td bgcolor='#ff8080' width='10%'></td><th>Ingresos con movimiento</th><td bgcolor='#ffff99' width='10%'></td><th>Ingresos sin movimiento</th><td bgcolor='' width='10%'>&nbsp;</td></tr></table><br>";
+echo "<table border='1' cellspacing='0' class='textomini'><tr><th>Leyenda:</th><th>Ingresos Anulados</th><td bgcolor='#ff8080' width='10%'></td><th>Ingresos con movimiento</th><td bgcolor='#ffff99' width='10%'></td><th>Ingresos sin movimiento</th><td bgcolor='' width='10%'>&nbsp;</td></tr></table>";
 
 //<input type='button' value='Editar Ingreso' class='boton' onclick='editar_ingreso(this.form)'>&nbsp;
-echo "<div class='divBotones'><input type='button' value='Registrar Ingreso' name='adicionar' class='boton' onclick='enviar_nav()'>&nbsp;";
+echo "<div class='divBotones ml-2 p-2'><input type='button' value='Registrar Ingreso' name='adicionar' class='boton' onclick='enviar_nav()'>&nbsp;";
 if($anulacionCodigo==1){
 	echo "<input type='button' value='Anular Ingreso' name='adicionar' class='boton2' onclick='anular_ingreso(this.form)'>";	
 }else{
@@ -231,9 +231,19 @@ echo"&nbsp; <input type='button' value='Buscar' class='boton' onclick='ShowBusca
 
 echo "<div id='divCuerpo'>";
 echo "<br><center><table class='texto'>";
-echo "<tr><th>&nbsp;</th><th>Numero Ingreso</th><th>Nro. Factura Proveedor</th><th>Fecha</th><th>Tipo de Ingreso</th><th>Almacen Origen</th>
-<th>Proveedor</th><th>Monto Compra</th>
-<th>Observaciones</th><th>&nbsp;</th></tr>";
+echo "<tr>
+    <th style='width:2%'>&nbsp;</th>
+    <th style='width:5%'>Número Ingreso</th>
+    <th style='width:5%'>Nro. Factura Proveedor</th>
+    <th style='width:10%'>Fecha</th>
+    <th style='width:5%'>Tipo de Ingreso</th>
+    <th style='width:10%'>Almacén Origen</th>
+    <th style='width:20%'>Proveedor</th>
+    <th style='width:10%'>Monto Compra</th>
+    <th style='width:19%'>Observaciones</th>
+    <th style='width:14%'>&nbsp;</th>
+</tr>";
+
 while ($dat = mysqli_fetch_array($resp)) {
     $codigo = $dat[0];
     $fecha_ingreso = $dat[1];
@@ -333,7 +343,7 @@ while ($dat = mysqli_fetch_array($resp)) {
     echo "<tr bgcolor='$color_fondo'><td align='center'>$chkbox</td><td align='center'>$nro_correlativo</td><td align='center'>&nbsp;$nota_entrega</td>
 	<td align='center'>$fecha_ingreso_mostrar $hora_ingreso</td><td>$nombre_tipoingreso</td><td>$almacenOrigenTraspaso - $nroSalidaOrigen</td>
 	<td>&nbsp;$proveedor</td><td align='right'>$montoCompraF</td>
-	<td>&nbsp;$obs_ingreso</td><td align='center'>";
+	<td>&nbsp;$obs_ingreso</td><td class='p-1' align='right'>";
 
     // Funcionalidad para Generar Nuevo Ingreso en Base a un Ingreso anterior
     if($codTipoIngreso==1000){
@@ -347,8 +357,13 @@ while ($dat = mysqli_fetch_array($resp)) {
 
 	echo "<a target='_BLANK' href='$urlDetalle?codigo_ingreso=$codigo'><img src='imagenes/icon_detail.png' border='0' width='30' heigth='30' alt='Ver Detalles del Ingreso'></a>
     <a target='_BLANK' href='$urlDetalle2?codigo_ingreso=$codigo'><img src='imagenes/pdf.png' border='0' width='30' heigth='30' alt='Ver Detalles del Ingreso'></a>
-	<a title='Modificar datos de credito' href='editar_tipoPagoIngresoMaterial.php?codigo_ingreso=$codigo'><img src='imagenes/edit.png' border='0' width='30' heigth='30' alt='Imagen Editar'></a>
-    </td></tr>";
+	<a title='Modificar datos de credito' href='editar_tipoPagoIngresoMaterial.php?codigo_ingreso=$codigo'><img src='imagenes/edit.png' border='0' width='30' heigth='30' alt='Imagen Editar'></a>";
+    if ($num_filas_movimiento == 0 && $anulado == 0) {
+        echo "<button type='button' class='btn btn-danger btn-sm p-1 pt-4' title='Anular ingreso' onclick='anularIngreso($codigo)'>
+            <i class='fa fa-close'></i>
+        </button>";
+    }
+    echo "</td></tr>";
 }
 echo "</table></center><br>";
 echo "</div>";
@@ -422,6 +437,63 @@ echo "</form>";
 
         <script type='text/javascript' language='javascript'>
         </script>
+    <script>
+    function anularIngreso(codigo) {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: 'Está a punto de anular este ingreso. ¡Esta acción no se puede deshacer!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, anular',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: 'ajax_anular_comprobante_ingreso.php',
+                    type: 'GET',
+                    data: { codigo: codigo },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Procesando...',
+                            text: 'Por favor espere',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
+                    success: function(response) {
+                        Swal.close();
+                        if (response.status) {
+                            Swal.fire({
+                                title: '¡Éxito!',
+                                text: response.message,
+                                type: 'success'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message,
+                                type: 'error'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.close();
+                        Swal.fire({
+                            title: 'Error en la petición',
+                            text: 'No se pudo conectar con el servidor. Intente nuevamente.\nDetalle: ' + error,
+                            type: 'error'
+                        });
+                    }
+                });
+            }
+        });
+    }
+    </script>
         <div id="pnldlgfrm"></div>
         <div id="pnldlgSN"></div>
         <div id="pnldlgAC"></div>
