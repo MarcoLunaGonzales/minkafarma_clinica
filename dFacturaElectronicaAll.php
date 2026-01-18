@@ -398,7 +398,7 @@ QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 4);
                     Descargar la factura en formato XML - <a href="www.farmaciasbolivia.com/facturas_online?f=<?=$nroDocVenta?>" target="_blank"> www.farmaciasbolivia.com/facturas_online?f=<?=$nroDocVenta?></a>
                 </p> -->
                 <p class="m-0 text-center">
-                    Visitanos en <a href="http://www.farmaciasbolivia.com.bo/" target="_blank"> www.farmaciasbolivia.com.bo</a>
+                    Visitanos en <a href="https://www.farmaciasbolivia.com.bo/" target="_blank"> www.farmaciasbolivia.com.bo</a>
                 </p>
 
                 <div class="social pt-3">

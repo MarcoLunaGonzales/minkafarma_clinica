@@ -4,7 +4,7 @@
 <title>MinkaSoftware</title> 
     <link rel="shortcut icon" href="imagenes/icon_farma.ico" type="image/x-icon">
 <link type="text/css" rel="stylesheet" href="menuLibs/css/demo.css" />
-<script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 <style>  
 	.boton-rojo{
