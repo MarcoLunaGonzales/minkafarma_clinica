@@ -20,10 +20,10 @@ Se actualizaron los siguientes archivos para cargar jQuery desde HTTPS:
 - indexAlmacenReg.php
 - ofertas/verDescuento.php
 
-**Cambio:** `http://code.jquery.com` → `https://code.jquery.com`
+**Cambio:** `https://code.jquery.com` → `https://code.jquery.com`
 
 ### 2. **CDN de Font Awesome actualizados a HTTPS**
-**Cambio:** `http://maxcdn.bootstrapcdn.com` → `https://maxcdn.bootstrapcdn.com`
+**Cambio:** `https://maxcdn.bootstrapcdn.com` → `https://maxcdn.bootstrapcdn.com`
 
 ### 3. **URLs externas actualizadas**
 - `enviar_correo/php/PHPMailer/email_template_bk.html`: Logo de farmaciasbolivia.com.bo

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * jVectorMap version 2.0.4
  *
  * Copyright 2011-2014, Kirill Lebedev
@@ -1794,7 +1794,7 @@ jvm.Proj = {
   /**
    * Converts point on sphere to the Cartesian coordinates using Albers Equal-Area Conic
    * projection
-   * @see <a href="http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html">Albers Equal-Area Conic projection</a>
+   * @see <a href="https://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html">Albers Equal-Area Conic projection</a>
    * @param {Number} lat Latitude in degrees
    * @param {Number} lng Longitude in degrees
    * @param {Number} c Central meridian in degrees
@@ -1821,7 +1821,7 @@ jvm.Proj = {
   /**
    * Converts Cartesian coordinates to the point on sphere using Albers Equal-Area Conic
    * projection
-   * @see <a href="http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html">Albers Equal-Area Conic projection</a>
+   * @see <a href="https://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html">Albers Equal-Area Conic projection</a>
    * @param {Number} x X of point in Cartesian system as integer
    * @param {Number} y Y of point in Cartesian system as integer
    * @param {Number} c Central meridian in degrees
@@ -1848,7 +1848,7 @@ jvm.Proj = {
   /**
    * Converts point on sphere to the Cartesian coordinates using Lambert conformal
    * conic projection
-   * @see <a href="http://mathworld.wolfram.com/LambertConformalConicProjection.html">Lambert Conformal Conic Projection</a>
+   * @see <a href="https://mathworld.wolfram.com/LambertConformalConicProjection.html">Lambert Conformal Conic Projection</a>
    * @param {Number} lat Latitude in degrees
    * @param {Number} lng Longitude in degrees
    * @param {Number} c Central meridian in degrees
@@ -1874,7 +1874,7 @@ jvm.Proj = {
   /**
    * Converts Cartesian coordinates to the point on sphere using Lambert conformal conic
    * projection
-   * @see <a href="http://mathworld.wolfram.com/LambertConformalConicProjection.html">Lambert Conformal Conic Projection</a>
+   * @see <a href="https://mathworld.wolfram.com/LambertConformalConicProjection.html">Lambert Conformal Conic Projection</a>
    * @param {Number} x X of point in Cartesian system as integer
    * @param {Number} y Y of point in Cartesian system as integer
    * @param {Number} c Central meridian in degrees

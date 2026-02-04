@@ -380,6 +380,65 @@ function ajaxPrecioItem(indice){
 	ajax.send(null);
 }
 
+// function ajaxPrecioItem(indice){
+//   var contenedor = document.getElementById("idprecio" + indice);
+//   var codmat = document.getElementById("materiales" + indice).value;
+//   var tipoPrecio = document.getElementById("tipoPrecio" + indice).value;
+//   var cod_cliente = document.getElementById('cliente').value;
+//   var cantidadUnitaria = document.getElementById("cantidad_unitaria" + indice).value;
+
+//   console.log("AjaxPrecioItemStart->descuento: " + tipoPrecio);
+  
+//   if (cantidadUnitaria <= 0) {
+//       cantidadUnitaria = 0;
+//   }
+
+//   var ajax = nuevoAjax();
+//   ajax.open("GET", "ajaxPrecioItem.php?codmat=" + codmat + "&indice=" + indice + "&tipoPrecio=" + tipoPrecio + "&cod_cliente=" + cod_cliente, true);
+//   ajax.onreadystatechange = function() {
+//       // Verificar si la solicitud está completa
+//       if (ajax.readyState == 4) {
+//           // Verificar si la respuesta fue exitosa (HTTP status 200)
+//           if (ajax.status == 200) {
+//               try {
+//                   var respuesta = ajax.responseText.split("#####");
+
+//                   // Actualizar contenido en la página
+//                   contenedor.innerHTML = respuesta[0];
+                  
+//                   if (parseFloat(cantidadUnitaria) > 0) {
+//                       document.getElementById("descuentoProducto" + indice).value = (respuesta[1] * parseFloat(cantidadUnitaria));
+//                   } else {
+//                       document.getElementById("descuentoProducto" + indice).value = (respuesta[1]);
+//                   }
+                  
+//                   if (respuesta[2] == 0) {
+//                       console.log("No aplica porcentaje para el producto");
+//                   } else {
+//                       if (parseFloat(cantidadUnitaria) > 0) {
+//                           document.getElementById("tipoPrecio" + indice).value = (respuesta[2] * parseFloat(cantidadUnitaria));
+//                       } else {
+//                           document.getElementById("tipoPrecio" + indice).value = (respuesta[2]);
+//                       }
+//                   }
+
+//                   if (respuesta[3] != "") {
+//                       document.getElementById("divMensajeOferta" + indice).innerHTML = respuesta[3];
+//                   }
+
+//                   calculaMontoMaterial(indice);
+//               } catch (error) {
+//                   // Mostrar un mensaje de error si ocurre un problema al procesar la respuesta
+//                   contenedor.innerHTML = "Error al procesar la respuesta: " + error.message;
+//               }
+//           } else {
+//               // Mostrar un mensaje de error basado en el código de estado HTTP
+//               contenedor.innerHTML = "Error en la conexión (Estado HTTP: " + ajax.status + ")";
+//           }
+//       }
+//   };
+// }
+
 function ajaxRazonSocial(f){
 	var contenedor;
 	contenedor=document.getElementById("divRazonSocial");
@@ -863,6 +922,11 @@ function setMateriales(f, cod, nombreMat, stockProducto){
  	cantidad_presentacionx=datos_material[2];
  	venta_solo_cajax=datos_material[3];
 	
+	// console.log(datos_material)
+	let producto_controlado = datos_material[5].trim();
+
+	document.getElementById('producto_controlado' + numRegistro).value = producto_controlado;
+	
 	document.getElementById('materiales'+numRegistro).value=cod;
 	document.getElementById('cod_material'+numRegistro).innerHTML=nombre_material_x;
 	document.getElementById('fecha_vencimiento'+numRegistro).innerHTML=fecha_venc_x;
@@ -873,9 +937,58 @@ function setMateriales(f, cod, nombreMat, stockProducto){
 	document.getElementById('divProfileData').style.visibility='hidden';
 	document.getElementById('divProfileDetail').style.visibility='hidden';
 	document.getElementById('divboton').style.visibility='hidden';
-
+	
+	if(venta_solo_cajax==1){
+		document.getElementById("cantidad_unitaria"+numRegistro).step=cantidad_presentacionx;
+		document.getElementById("cantidad_unitaria"+numRegistro).min=cantidad_presentacionx;
+		document.getElementById("div_venta_caja"+numRegistro).innerHTML="Venta x Caja";
+		console.log('cambiando a venta por caja.'+cantidad_presentacionx);
+	}
 	document.getElementById("cantidad_unitaria"+numRegistro).focus();
 
+	//Validacion para poner en amarillo cuando el stock es menor a la cantidad de presentacion.
+	var tableProductoX=document.getElementById("data"+numRegistro);
+	if(stockProducto<=cantidad_presentacionx){
+		// tableProductoX.style.backgroundColor = "yellow";
+		document.getElementById('sec_stock' + numRegistro).style.backgroundColor = "yellow";
+	}
+	//Validacion en caso de la fecha de Vencimiento poner en rojo cuando son menos de 3 meses
+	var numeroMesesControlVencimiento = document.getElementById('nro_meses_control_vencimiento').textContent.trim();
+	console.log("control Vencimiento en meses: "+numeroMesesControlVencimiento);
+	var fechaActual = new Date();
+	var tempFechaDiv = document.createElement("div");
+	tempFechaDiv.innerHTML = fecha_venc_x;
+	var fechaObjetivo = tempFechaDiv.textContent || tempFechaDiv.innerText;
+	console.log("Fecha Vencimiento X: "+fechaObjetivo);
+	var partesFecha = fechaObjetivo.split("/");
+	var mesObjetivo = parseInt(partesFecha[0]);
+	var anioObjetivo = parseInt(partesFecha[1]);
+	var mesesFaltantes = (anioObjetivo - fechaActual.getFullYear()) * 12 + mesObjetivo - (fechaActual.getMonth() + 1);
+	console.log("Meses faltantes: " + mesesFaltantes);
+
+	// if(numeroMesesControlVencimiento>0 && mesesFaltantes<=numeroMesesControlVencimiento){
+	// 	console.log("### numeroMesesControlVencimiento: "+numeroMesesControlVencimiento);
+	// 	console.log("### mesesFaltantes: "+mesesFaltantes);
+	// 	tableProductoX.style.backgroundColor = "red";
+	// }
+	
+	// JSON a un objeto
+	var controlVencimientoArray = JSON.parse(numeroMesesControlVencimiento);
+	controlVencimientoArray.sort((a, b) => a.meses - b.meses);
+	var color = '';
+	$.each(controlVencimientoArray, function(index, item) {
+		if (mesesFaltantes <= item.meses) {
+			color = item.color;
+			return false;
+		} else {
+			color = 'white';
+		}
+	});
+	// Cambiar el color en base al valor de "color" de configuracion
+	// if (color && color.trim() !== '') {
+	// 	tableProductoX.style.backgroundColor = color;
+	// }
+	document.getElementById('sec_fecha_vencimiento' + numRegistro).style.backgroundColor = color;
 
 	//actStock(numRegistro);
 	ajaxPrecioItem(numRegistro);

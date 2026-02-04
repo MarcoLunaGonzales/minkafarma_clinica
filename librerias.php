@@ -18,7 +18,7 @@
   <script src="assets/js/plugins/jquery.validate.min.js"></script>
   <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
   <script src="assets/js/plugins/jquery.bootstrap-wizard.js"></script>
-  <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+  <!--  Plugin for Select, full documentation here: https://silviomoreto.github.io/bootstrap-select -->
   <script src="assets/js/plugins/bootstrap-selectpicker.js"></script>
   <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
   <script src="assets/js/plugins/bootstrap-datetimepicker.min.js"></script>

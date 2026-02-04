@@ -1059,7 +1059,7 @@ echo "</table><br>";
 					$input_precio   = number_format(($detalle_precio_bruto * $table_cantidadpresentacion), 2);
 			?>
 				<div id="div<?=$index_detalle?>">
-					<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+					<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 					<html xmlns="http://www.w3.org/1999/xhtml">
 					<head>
 					<link rel="STYLESHEET" type="text/css" href="stilos.css" />

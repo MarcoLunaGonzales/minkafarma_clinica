@@ -14,4 +14,4 @@ Usage:
 &lt;img alt="testing" src="barcode.php?text=testing" /&gt;
 
 Result:
-<img alt="testing" src="http://davidscotttufts.com/code/barcode.php?text=testing" />
+<img alt="testing" src="https://davidscotttufts.com/code/barcode.php?text=testing" />
