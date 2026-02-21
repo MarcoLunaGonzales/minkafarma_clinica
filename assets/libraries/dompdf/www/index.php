@@ -1,4 +1,4 @@
-<?php include("head.inc"); ?>
+﻿<?php include("head.inc"); ?>
 
 <a name="overview"></a><h2>Overview</h2>
 
@@ -9,7 +9,7 @@ the style attributes of individual HTML elements. It also supports most
 presentational HTML attributes.</p>
 
 <p>PDF rendering is currently provided either by PDFLib (<a
-href="http://www.pdflib.com">www.pdflib.com</a>) or by a bundled version the
+href="https://www.pdflib.com">www.pdflib.com</a>) or by a bundled version the
 CPDF class, originally R&amp;OS CPDF written by Wayne Munro but customized by
 the dompdf team to improve performance and add features. In order to use PDFLib
 with dompdf the PDFLib PHP extension is required (available from PDFLib). Using
@@ -18,3 +18,4 @@ somewhat, while the CPDF class, though slightly slower, eliminates any
 dependencies on external PDF libraries.</p>
 
 <?php include("foot.inc"); ?>
+

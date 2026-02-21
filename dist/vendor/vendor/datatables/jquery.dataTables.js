@@ -1,4 +1,4 @@
-/*! DataTables 1.10.21
+﻿/*! DataTables 1.10.21
  * ©2008-2020 SpryMedia Ltd - datatables.net/license
  */
 
@@ -64,7 +64,7 @@
 	 * flexible tool, based upon the foundations of progressive enhancement,
 	 * which will add advanced interaction controls to any HTML table. For a
 	 * full list of features please refer to
-	 * [DataTables.net](href="http://datatables.net).
+	 * [DataTables.net](href="https://datatables.net).
 	 *
 	 * Note that the `DataTable` object is not a global variable but is aliased
 	 * to `jQuery.fn.DataTable` and `jQuery.fn.dataTable` through which it may
@@ -15352,3 +15352,4 @@
 
 	return $.fn.dataTable;
 }));
+

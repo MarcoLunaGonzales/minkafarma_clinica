@@ -1,6 +1,6 @@
 // Title: Tigra Tree
 // Description: See the demo at url
-// URL: http://www.softcomplex.com/products/tigra_menu_tree/
+// URL: https://www.softcomplex.com/products/tigra_menu_tree/
 // Version: 1.1 (size optimized)
 // Date: 11-12-2002 (mm-dd-yyyy)
 // Notes: This script is free. Visit official site for further details.

@@ -532,7 +532,7 @@ if($tipoPagoBusqueda!="")
 if($fechaIniBusqueda!="" && $fechaFinBusqueda!="")
 {   $consulta = $consulta."AND '$fechaIniBusqueda'<=s.fecha AND s.fecha<='$fechaFinBusqueda' ";
 }   
-$consulta = $consulta."ORDER BY s.fecha desc, s.hora_salida desc, s.nro_correlativo desc limit 0, 1000 ";
+$consulta = $consulta."ORDER BY s.fecha desc, s.hora_salida desc, s.nro_correlativo desc limit 0, 30 ";
 
 //echo $consulta;
 //

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include("datosUsuario.php");
 require("conexionmysqli.inc");
 $htmlMensaje="";
@@ -256,7 +256,7 @@ if(isset($_POST["clave_ant"])){
   <header>
     
     <!-- here’s the avatar -->
-    <!--a href="http://ali.shahab.pk"-->
+    <!--a href="https://ali.shahab.pk"-->
       <img src="imagenes/person5.jpg">
     <!--/a-->
 

@@ -204,7 +204,7 @@
     /*              LOGO                */
     /************************************/
     $pdf->setY(35);$pdf->setX(10);
-    // $pdf->Image('pruebaImg.jpg' , 10, 20, 20, 20,'JPG', 'http://www.desarrolloweb.com');
+    // $pdf->Image('pruebaImg.jpg' , 10, 20, 20, 20,'JPG', 'https://www.desarrolloweb.com');
 
     /********************************************************/
     /*              Datos Generales de la Factura           */

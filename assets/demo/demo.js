@@ -1,4 +1,4 @@
-demo = {
+﻿demo = {
 
   initContactUsMap: function() {
     var myLatlng = new google.maps.LatLng(44.433530, 26.093928);
@@ -690,7 +690,7 @@ demo = {
         buttonsStyling: false,
         confirmButtonClass: "btn btn-success",
         html: 'You can use <b>bold text</b>, ' +
-          '<a href="http://github.com">links</a> ' +
+          '<a href="https://github.com">links</a> ' +
           'and other HTML tags'
       }).catch(swal.noop)
 

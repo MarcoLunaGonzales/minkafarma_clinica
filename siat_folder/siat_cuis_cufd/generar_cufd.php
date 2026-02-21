@@ -17,9 +17,12 @@ $cuis=obtenerCuis_vigente_BD($ciudad,$cod_entidad);
 deshabilitarCufd($ciudad,$cuis,date('Y-m-d'),$cod_entidad);
 generarCufd($ciudad,$cod_impuestos,$codigoPuntoVenta,$cod_entidad);
 // exit;
+
 if(isset($_GET['l'])){
 	?><script type="text/javascript">window.location.href='../../registrar_salidaventas.php';</script><?php	
 }else{
 	?><script type="text/javascript">window.location.href='index.php'</script><?php
 }
+
+
 ?>
