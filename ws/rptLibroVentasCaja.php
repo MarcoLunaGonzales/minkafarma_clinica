@@ -45,7 +45,7 @@ $sql = "SELECT
             s.salida_anulada,
             SUM(ds.cantidad_unitaria*ds.precio_unitario) as total_detalle,
             SUM(ds.descuento_unitario) as descuento_detalle,
-            SUM((ds.cantidad_unitaria*ds.precio_unitario)-ds.descuento_unitario) as total_final_detalle,
+            (SUM((ds.cantidad_unitaria*ds.precio_unitario)-ds.descuento_unitario) - s.descuento) as total_final_detalle,
             td.abreviatura as tipodocumento,
             'FARMACIA' as emision,
             1 as tipo_venta
