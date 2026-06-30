@@ -34,32 +34,52 @@ $nitTxt   = mysqli_result($respConf, 0, 1);
 //         AND s.cod_tiposalida = 1001 
 //         AND s.salida_anulada = 0 ";
 $sql = "SELECT 
-            (
-                COALESCE(SUM(
-                    (ds.cantidad_unitaria * ds.precio_unitario) - ds.descuento_unitario
-                ), 0)
-                - COALESCE(SUM(s.descuento), 0)
-            ) AS total_acumulado
-        FROM salida_almacenes s 
-        INNER JOIN funcionarios f ON f.codigo_funcionario = s.cod_funcionario_caja
-        LEFT JOIN salida_detalle_almacenes ds ON ds.cod_salida_almacen = s.cod_salida_almacenes
-        LEFT JOIN tipos_docs td ON td.codigo = s.cod_tipo_doc
-        WHERE f.cod_personal = '$cod_personal'
-        AND CONCAT(s.fecha, ' ', s.hora_salida) BETWEEN '$fechaInicio' AND '$fechaFin'  
-        AND s.cod_tiposalida = 1001 
-        AND s.salida_anulada = 0 ";
-if(!empty($tipoPago)){
+            COALESCE(SUM(t.total_venta), 0) AS total_acumulado
+        FROM (
+            SELECT 
+                s.cod_salida_almacenes,
+                (
+                    COALESCE(SUM(
+                        (COALESCE(ds.cantidad_unitaria, 0) * COALESCE(ds.precio_unitario, 0))
+                        - COALESCE(ds.descuento_unitario, 0)
+                    ), 0)
+                    - COALESCE(s.descuento, 0)
+                ) AS total_venta
+            FROM salida_almacenes s 
+            INNER JOIN funcionarios f 
+                ON f.codigo_funcionario = s.cod_funcionario_caja
+            LEFT JOIN salida_detalle_almacenes ds 
+                ON ds.cod_salida_almacen = s.cod_salida_almacenes
+            LEFT JOIN tipos_docs td 
+                ON td.codigo = s.cod_tipo_doc
+            WHERE f.cod_personal = '$cod_personal'
+            AND CONCAT(s.fecha, ' ', s.hora_salida) BETWEEN '$fechaInicio' AND '$fechaFin'
+            AND s.cod_tiposalida = 1001
+            AND s.salida_anulada = 0 ";
+
+if (!empty($tipoPago)) {
     $sql .= " AND s.cod_tipopago = '$tipoPago' ";
 }
-if(!empty($rpt_territorio)){
-    $sql .= " AND s.cod_almacen IN (SELECT a.cod_almacen FROM almacenes a WHERE a.cod_ciudad IN ($rpt_territorio)) ";
+
+if (!empty($rpt_territorio)) {
+    $sql .= " AND s.cod_almacen IN (
+                    SELECT a.cod_almacen 
+                    FROM almacenes a 
+                    WHERE a.cod_ciudad IN ($rpt_territorio)
+              ) ";
 }
-$sql .= " ORDER BY s.nro_correlativo";
+
+$sql .= " GROUP BY 
+                s.cod_salida_almacenes,
+                s.descuento
+        ) t";
+
 $resp = mysqli_query($enlaceCon, $sql);
+
 $totalAcumulado = 0;
 
-if ($fila = mysqli_fetch_assoc($resp)) {
-    $totalAcumulado = $fila['total_acumulado'] ?? 0;
+if ($resp && $row = mysqli_fetch_assoc($resp)) {
+    $totalAcumulado = $row['total_acumulado'];
 }
 $response = [
     'fechaInicio'       => $fechaInicio,
