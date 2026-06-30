@@ -23,8 +23,23 @@ $respConf = mysqli_query($enlaceCon, $sqlConf);
 $nitTxt   = mysqli_result($respConf, 0, 1);
 
 // 1: Farmacia, 2: Clinica
+// $sql = "SELECT 
+//             SUM((ds.cantidad_unitaria * ds.precio_unitario) - ds.descuento_unitario) AS total_acumulado
+//         FROM salida_almacenes s 
+//         INNER JOIN funcionarios f ON f.codigo_funcionario = s.cod_funcionario_caja
+//         LEFT JOIN salida_detalle_almacenes ds ON ds.cod_salida_almacen = s.cod_salida_almacenes
+//         LEFT JOIN tipos_docs td ON td.codigo = s.cod_tipo_doc
+//         WHERE f.cod_personal = '$cod_personal'
+//         AND CONCAT(s.fecha, ' ', s.hora_salida) BETWEEN '$fechaInicio' AND '$fechaFin'  
+//         AND s.cod_tiposalida = 1001 
+//         AND s.salida_anulada = 0 ";
 $sql = "SELECT 
-            SUM((ds.cantidad_unitaria * ds.precio_unitario) - ds.descuento_unitario) AS total_acumulado
+            (
+                COALESCE(SUM(
+                    (ds.cantidad_unitaria * ds.precio_unitario) - ds.descuento_unitario
+                ), 0)
+                - COALESCE(s.descuento, 0)
+            ) AS total_acumulado
         FROM salida_almacenes s 
         INNER JOIN funcionarios f ON f.codigo_funcionario = s.cod_funcionario_caja
         LEFT JOIN salida_detalle_almacenes ds ON ds.cod_salida_almacen = s.cod_salida_almacenes
