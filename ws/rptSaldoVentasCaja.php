@@ -38,7 +38,7 @@ $sql = "SELECT
                 COALESCE(SUM(
                     (ds.cantidad_unitaria * ds.precio_unitario) - ds.descuento_unitario
                 ), 0)
-                - COALESCE(s.descuento, 0)
+                - COALESCE(SUM(s.descuento), 0)
             ) AS total_acumulado
         FROM salida_almacenes s 
         INNER JOIN funcionarios f ON f.codigo_funcionario = s.cod_funcionario_caja
