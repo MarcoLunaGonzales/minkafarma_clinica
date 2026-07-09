@@ -249,9 +249,10 @@ class FacturaOnline
 			(select siat_cafc from dosificaciones d where d.cod_dosificacion=s.cod_dosificacion and d.tipo_dosificacion=2 and d.tipo_descargo=2)as cafc,c.siat_codigoActividad,c.siat_codigoProducto, 
 			'' as siat_nombreEstudiante, 
 			'' as siat_periodoFacturado,
-			c.siat_unidadMedida
+			c.siat_unidadMedida,
+			s.descuento
 
-			 from salida_almacenes s join almacenes a on a.cod_almacen=s.cod_almacen
+			from salida_almacenes s join almacenes a on a.cod_almacen=s.cod_almacen
 			join ciudades c on c.cod_ciudad=a.cod_ciudad
 			where s.cod_salida_almacenes=$codSalidaFactura;";
 			
