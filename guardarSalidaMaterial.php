@@ -462,7 +462,8 @@ if($sql_inserta==1){
 									1 as cod_entidad,
 									1 as cod_unidad,
 									sa.cod_tipopago as cod_tipo_pago,
-									sa.razon_social
+									sa.razon_social, 
+									sa.descuento
 							FROM salida_almacenes sa
 							WHERE sa.cod_salida_almacenes = '$cod_salida_almacen'";
 			// Ejecutar la consulta del maestro
