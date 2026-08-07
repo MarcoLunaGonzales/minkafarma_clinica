@@ -647,8 +647,18 @@ while ($dat = mysqli_fetch_array($resp)) {
     echo "<td align='center' class='verCobros' data-cod_venta='$codigo' style='cursor:pointer;'>$icono $stikea$nombreTipoDoc-$nro_correlativo $stikec</td>";
     echo "<td align='center'>$stikea$fecha_salida_mostrar $hora_salida$stikec</td>";
     echo "<td>$stikea $nombreVendedor $stikec</td>";
-    echo "<td>$stikea $tipoPago $stikec</td>
-    <td>$stikea &nbsp;<small><span style='color:blue'>$nombreCliente</span></small> <br> $razonSocial $stikec</td>
+    // echo "<td>$stikea $tipoPago $stikec</td>
+    echo "<td>
+            <button type='button'
+                hidden
+                class='btn btn-sm btn-info btn-fab'
+                title='Actualizar tipo de pago'
+                onclick=\"abrirModalTipoPago('$codigo', '$codTipoPago')\">
+                <i class='material-icons'>payment</i>
+            </button>
+            $stikea $tipoPago $stikec
+        </td>";
+    echo "<td>$stikea &nbsp;<small><span style='color:blue'>$nombreCliente</span></small> <br> $razonSocial $stikec</td>
     <td>$stikea&nbsp; $tipoDocIdentidadAbrev-$nitCli $stikec</td>
     <td>$stikea&nbsp;$montoVentaFormat $stikec</td>
     <td>$stikea &nbsp;$obs_salida $stikec</td>";
@@ -773,6 +783,96 @@ echo "</form>";
 </div>
 <!--    end small modal -->
 
+
+<div class="modal fade modal-primary"
+    id="modalActualizarTipoPago"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-md">
+        <div class="modal-content card">
+
+            <div class="card-header card-header-info card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">payment</i>
+                </div>
+
+                <h4 class="card-title text-dark font-weight-bold">
+                    Actualizar tipo de pago
+                </h4>
+
+                <button type="button"
+                    class="btn btn-danger btn-sm btn-fab float-right"
+                    data-dismiss="modal"
+                    style="position:absolute; top:0; right:0;">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+
+            <div class="card-body">
+
+                <input type="hidden"
+                    id="codigoSalidaTipoPago"
+                    value="0">
+
+                <div class="form-group">
+                    <label for="tipoVenta">
+                        Nuevo tipo de pago
+                    </label>
+
+                    <?php
+                    $sql1 = "SELECT cod_tipopago, nombre_tipopago
+                            FROM tipos_pago
+                            ORDER BY cod_tipopago";
+
+                    $resp1 = mysqli_query($enlaceCon, $sql1);
+
+                    echo "<select name='tipoVenta'
+                            class='selectpicker form-control'
+                            id='tipoVenta'
+                            data-style='btn-info'>";
+
+                    while ($datTipoPago = mysqli_fetch_array($resp1)) {
+                        $codigoTipoPago = $datTipoPago[0];
+                        $nombreTipoPago = htmlspecialchars(
+                            $datTipoPago[1],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+
+                        echo "<option value='$codigoTipoPago'>
+                                $nombreTipoPago
+                            </option>";
+                    }
+
+                    echo "</select>";
+                    ?>
+                </div>
+
+            </div>
+
+            <div class="card-footer justify-content-end">
+
+                <button type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                    class="btn btn-info"
+                    id="btnGuardarTipoPago"
+                    onclick="actualizarTipoPagoVenta()">
+
+                    <i class="material-icons">save</i>
+                    Guardar cambio
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div id="divRecuadroExt" style="background-color:#666; position:absolute; width:800px; height: 600px; top:30px; left:150px; visibility: hidden; opacity: .70; -moz-opacity: .70; filter:alpha(opacity=70); -webkit-border-radius: 20px; -moz-border-radius: 20px; z-index:2;">
@@ -1107,6 +1207,93 @@ echo "</form>";
                     }
                 });
             });
+        </script>
+        <script>
+            function abrirModalTipoPago(codigoSalida, codigoTipoPago){
+                $('#codigoSalidaTipoPago').val(codigoSalida);
+                $('#tipoVenta').val(codigoTipoPago);
+
+                if ($.fn.selectpicker) {
+                    $('#tipoVenta').selectpicker('refresh');
+                }
+
+                $('#modalActualizarTipoPago').modal('show');
+            }
+
+            function actualizarTipoPagoVenta(){
+                var codigoSalida = $('#codigoSalidaTipoPago').val();
+                var codigoTipoPago = $('#tipoVenta').val();
+                var botonGuardar = $('#btnGuardarTipoPago');
+
+                if (!codigoTipoPago) {
+                    Swal.fire(
+                        'Atención',
+                        'Debe seleccionar un tipo de pago.',
+                        'warning'
+                    );
+                    return;
+                }
+
+                Swal.fire({
+                    title: '¿Confirmar actualización?',
+                    text: 'Se cambiará el tipo de pago de la venta seleccionada.',
+                    type: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, actualizar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false
+                }).then(function(resultado) {
+
+                    if (!resultado.value) {
+                        return;
+                    }
+
+                    botonGuardar.prop('disabled', true);
+
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: 'ajaxActualizarTipoPagoVenta.php',
+                        data: {
+                            codigo_salida: codigoSalida,
+                            codigo_tipo_pago: codigoTipoPago
+                        },
+                        success: function(respuesta) {
+
+                            if (respuesta.ok) {
+                                Swal.fire(
+                                    'Actualizado',
+                                    respuesta.mensaje,
+                                    'success'
+                                ).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'No se pudo actualizar',
+                                    respuesta.mensaje,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            var mensaje = 'Ocurrió un error al actualizar el tipo de pago.';
+
+                            if (
+                                xhr.responseJSON &&
+                                xhr.responseJSON.mensaje
+                            ) {
+                                mensaje = xhr.responseJSON.mensaje;
+                            }
+
+                            Swal.fire('Error', mensaje, 'error');
+                        },
+                        complete: function() {
+                            botonGuardar.prop('disabled', false);
+                        }
+                    });
+                });
+            }
         </script>
     </body>
 </html>
