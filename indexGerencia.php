@@ -203,7 +203,7 @@ $nombre_recurso = basename($_SERVER['PHP_SELF']);
 
 			<li><a href="rptOpArqueoDiario.php?variableAdmin=1" target="contenedorPrincipal">Cierre de Caja</a></li>
 			<li><a href="rptOpArqueoDiarioGeneral.php?variableAdmin=1" target="contenedorPrincipal">Cierre de Caja General</a></li>
-			<li><a href="navegadorVentasDiaTipoPago.php" target="contenedorPrincipal">Caja Ventas</a></li>
+			<li><a href="navegadorVentasDiaTipoPago.php" target="contenedorPrincipal">Ventas para Caja</a></li>
 			<li><a href="control_inventario/list.php" target="contenedorPrincipal">Control de Inventario</a></li>
 			<li><span>Reportes</span>
 				<ul>

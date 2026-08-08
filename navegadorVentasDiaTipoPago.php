@@ -58,7 +58,7 @@ if ($globalAlmacen <= 0) {
 
 $sqlTiposPago = "SELECT cod_tipopago, nombre_tipopago
                  FROM tipos_pago
-                 WHERE cod_tipopago IN (1, 2, 3)
+                 WHERE cod_tipopago IN (1, 3)
                  ORDER BY cod_tipopago";
 $resultadoTiposPago = mysqli_query($enlaceCon, $sqlTiposPago);
 
@@ -203,7 +203,7 @@ function formatoMonto($monto)
 <main class="vd-page">
     <header class="vd-header">
         <div>
-            <h1 class="vd-title">Ventas de hoy</h1>
+            <h1 class="vd-title">Ventas para Caja</h1>
             <p class="vd-subtitle"><?php echo escapar(date('d/m/Y')); ?> · Solo se permite actualizar el tipo de pago.</p>
         </div>
         <div class="vd-summary">
@@ -254,6 +254,10 @@ function formatoMonto($monto)
                                 <?php } else { ?>
                                     <span class="vd-muted">No disponible</span>
                                 <?php } ?>
+                                <button type="button" class="vd-btn vd-btn-secondary" onclick="window.open('formatoFacturaOnLineCaja.php?codVenta=<?php echo (int) $venta['cod_salida_almacenes']; ?>', '_blank')">
+                                    <svg class="vd-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5v8h14V8zm0-4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM7 9h10v6H7V9z"/></svg>
+                                    Imprimir PDF
+                                </button>
                             </td>
                         </tr>
                     <?php } ?>
