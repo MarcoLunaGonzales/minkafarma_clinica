@@ -454,7 +454,11 @@ if($sql_inserta==1){
 			/***************************************************************************/
 			$cod_salida_almacen = $codigo;
 
-			$queryMaestro = "SELECT 
+			/*
+			* Obtener la información principal de la venta.
+			* El descuento general proviene únicamente de salida_almacenes.descuento.
+			*/
+			$queryMaestro = "SELECT
 									sa.cod_salida_almacenes AS cod_salida_almacen,
 									sa.cod_cliente AS cod_paciente,
 									sa.nro_correlativo AS nro_factura_siat,
@@ -465,92 +469,141 @@ if($sql_inserta==1){
 									1 AS cod_unidad,
 									sa.cod_tipopago AS cod_tipo_pago,
 									sa.razon_social,
-									sa.descuento
+									COALESCE(sa.descuento, 0) AS descuento
 							FROM salida_almacenes sa
 							WHERE sa.cod_salida_almacenes = '$cod_salida_almacen'";
+
 			$resultMaestro = mysqli_query($enlaceCon, $queryMaestro);
+
 			$data = [];
-			while ($salida = mysqli_fetch_assoc($resultMaestro)) {
-				$codSalidaAlmacen = $salida['cod_salida_almacen'];
-				/*
-				* Se agrupa toda la venta como un solo servicio.
-				* El descuento enviado corresponde a la suma de los
-				* descuentos registrados en el detalle.
-				*/
-				$queryDetalle = "SELECT 
-										'34' AS cod_area,
-										'656' AS cod_servicio,
-										1 AS cantidad,
-										ROUND(
-											SUM(sd.cantidad_unitaria * sd.precio_unitario),
-											2
-										) AS precio,
-										ROUND(
-											SUM(COALESCE(sd.descuento_unitario, 0)),
-											2
-										) AS descuento
-								FROM salida_detalle_almacenes sd
-								LEFT JOIN material_apoyo m
-										ON m.codigo_material = sd.cod_material
-								WHERE sd.cod_salida_almacen = '$codSalidaAlmacen'";
-				$resultDetalle = mysqli_query($enlaceCon, $queryDetalle);
-				$detalles = [];
-				$descuento_detalle = 0;
-				while ($detalle = mysqli_fetch_assoc($resultDetalle)) {
-					// Normalizar los valores numéricos
-					$detalle['cantidad']  = (float) $detalle['cantidad'];
-					$detalle['precio']    = round((float) $detalle['precio'], 2);
-					$detalle['descuento'] = round((float) $detalle['descuento'], 2);
-					// Acumular el descuento total del detalle
-					$descuento_detalle += $detalle['descuento'];
-					$detalles[] = $detalle;
+
+			if ($resultMaestro) {
+				while ($salida = mysqli_fetch_assoc($resultMaestro)) {
+					$codSalidaAlmacen = $salida['cod_salida_almacen'];
+
+					/*
+					* Se agrupa toda la venta como un solo servicio.
+					*
+					* No se consulta descuento_unitario porque el descuento
+					* válido es el registrado en salida_almacenes.descuento.
+					*/
+					$queryDetalle = "SELECT
+											'34' AS cod_area,
+											'656' AS cod_servicio,
+											1 AS cantidad,
+											ROUND(
+												COALESCE(
+													SUM(
+														sd.cantidad_unitaria
+														* sd.precio_unitario
+													),
+													0
+												),
+												2
+											) AS precio
+									FROM salida_detalle_almacenes sd
+									WHERE sd.cod_salida_almacen = '$codSalidaAlmacen'";
+
+					$resultDetalle = mysqli_query($enlaceCon, $queryDetalle);
+
+					$detalles = [];
+
+					if ($resultDetalle) {
+						while ($detalle = mysqli_fetch_assoc($resultDetalle)) {
+							// Normalizar los valores numéricos.
+							$detalle['cantidad'] = (float)$detalle['cantidad'];
+							$detalle['precio']   = round(
+								(float)$detalle['precio'],
+								2
+							);
+
+							/*
+							* No se agrega el campo descuento al detalle.
+							* El descuento se envía únicamente en la cabecera.
+							*/
+							$detalles[] = $detalle;
+						}
+
+						mysqli_free_result($resultDetalle);
+					}
+
+					/*
+					* Normalizar el descuento general obtenido directamente
+					* de salida_almacenes.
+					*/
+					$salida['descuento'] = round(
+						(float)$salida['descuento'],
+						2
+					);
+
+					// Información que recibirá el servicio financiero.
+					$salida['detalles']  = $detalles;
+					$salida['tipo_comp'] = 1; // Farmacia
+
+					$data[] = $salida;
 				}
-				$descuento_detalle = round($descuento_detalle, 2);
-				// Datos que recibirán ambos servicios
-				$salida['detalles']          = $detalles;
-				$salida['descuento_detalle'] = $descuento_detalle;
-				$salida['tipo_comp']         = 1; // Farmacia
-				$data[] = $salida;
-				mysqli_free_result($resultDetalle);
+
+				mysqli_free_result($resultMaestro);
 			}
-			mysqli_free_result($resultMaestro);
+
 			/*
-			* Seleccionar el servicio según el descuento registrado
-			* en salida_detalle_almacenes.
+			* Seleccionar el servicio según el descuento general registrado
+			* en salida_almacenes.descuento.
 			*/
 			if (!empty($data)) {
-				$url_financiero = rtrim(obtenerValorConfiguracion($enlaceCon, '-5'), '/');
-				if ($data[0]['descuento_detalle'] > 0) {
-					$json_url = $url_financiero .
-						'/factura/backend_comprobante_new_descuento.php';
+				$url_financiero = rtrim(
+					obtenerValorConfiguracion($enlaceCon, '-5'),
+					'/'
+				);
+
+				$descuentoGeneral = round(
+					(float)($data[0]['descuento'] ?? 0),
+					2
+				);
+
+				if ($descuentoGeneral > 0) {
+					$json_url = $url_financiero
+						. '/factura/backend_comprobante_new_descuento.php';
 				} else {
-					$json_url = $url_financiero .
-						'/factura/backend_comprobante_new.php';
+					$json_url = $url_financiero
+						. '/factura/backend_comprobante_new.php';
 				}
+
+				$jsonData = json_encode(
+					$data[0],
+					JSON_UNESCAPED_UNICODE
+				);
+
 				$ch = curl_init($json_url);
+
 				curl_setopt_array($ch, [
 					CURLOPT_RETURNTRANSFER => true,
 					CURLOPT_POST           => true,
 					CURLOPT_HTTPHEADER     => [
-						'Content-Type: application/json'
+						'Content-Type: application/json',
+						'Content-Length: ' . strlen($jsonData)
 					],
-					CURLOPT_POSTFIELDS     => json_encode(
-						$data[0],
-						JSON_UNESCAPED_UNICODE
-					),
+					CURLOPT_POSTFIELDS     => $jsonData,
 					CURLOPT_CONNECTTIMEOUT => 10,
 					CURLOPT_TIMEOUT        => 60
 				]);
+
 				$response  = curl_exec($ch);
 				$curlError = curl_error($ch);
 				$httpCode  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
 				curl_close($ch);
-				// if ($response === false || $httpCode >= 400) {
-				// 	error_log(
-				// 		"Error al generar comprobante. " .
-				// 		"HTTP: $httpCode. CURL: $curlError. Respuesta: $response"
-				// 	);
-				// }
+
+				/*
+				if ($response === false || $httpCode >= 400) {
+					error_log(
+						'Error al generar comprobante. '
+						. 'HTTP: ' . $httpCode
+						. '. CURL: ' . $curlError
+						. '. Respuesta: ' . $response
+					);
+				}
+				*/
 			}
 			/***************************************************************************/
 			if($enviar_correo){
