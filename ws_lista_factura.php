@@ -121,10 +121,10 @@ $sql = "SELECT
             ON std.codigoClasificador = s.siat_codigotipodocumentoidentidad
         WHERE s.cod_tiposalida = 1001
           AND s.cod_tipo_doc IN (1, 4)
-          AND s.fecha BETWEEN ? AND ?";
+          ";
 
-$tipos = 'ss';
-$parametros = array($fechaInicio, $fechaFin);
+$tipos = '';
+$parametros = array();
 
 if ($nroCorrelativo !== '') {
     $sql .= ' AND s.nro_correlativo = ?';
@@ -150,7 +150,7 @@ if ($codAlmacen !== '') {
     $parametros[] = (int) $codAlmacen;
 }
 
-$sql .= ' ORDER BY s.fecha DESC, s.hora_salida DESC, s.nro_correlativo DESC';
+$sql .= ' ORDER BY s.fecha DESC, s.hora_salida DESC, s.nro_correlativo DESC LIMIT 100';
 
 $stmt = mysqli_prepare($enlaceCon, $sql);
 if (!$stmt) {
